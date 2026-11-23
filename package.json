@@ -1,0 +1,19 @@
+{
+  "name": "php-lernen",
+  "private": true,
+  "description": "PHP lernen: Lern-App mit echtem PHP 8.4 im Browser",
+  "scripts": {
+    "build": "sh build.sh"
+  },
+  "devDependencies": {
+    "@codemirror/autocomplete": "6.20.4",
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/lang-php": "6.0.2",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.15",
+    "@lezer/highlight": "1.2.5",
+    "esbuild": "0.28.2",
+    "php-wasm": "0.2.0"
+  }
+}

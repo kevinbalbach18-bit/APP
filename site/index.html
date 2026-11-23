@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EEEFF7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14122A" media="(prefers-color-scheme: dark)">
+<title>PHP lernen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root {
+  --paper: #EEEFF7; --paper-2: #E2E4F2; --card: #FFFFFF; --rule: #D3D6EA;
+  --ink: #1D1A38; --ink-2: #57547D;
+  --elephant: #8892BF; --elephant-d: #4F5B93;
+  --slab: #221E45; --slab-out: #17142F; --slab-line: #36316A; --slab-ink: #ECEAFB; --slab-mute: #9893C2;
+  --ochre: #F4B740; --ochre-ink: #2B2000;
+  --mint: #23855F; --mint-bg: #DCF2E7; --rose: #C23A52; --rose-bg: #FBE3E8; --rose-l: #FF9AAB; --mint-l: #8EE3B5;
+  --sans: 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --tabs-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14122A; --paper-2: #1D1A3B; --card: #1F1C3E; --rule: #322E5C;
+    --ink: #ECEAFB; --ink-2: #A9A5CF;
+    --elephant-d: #B4BCFF;
+    --slab: #241F4B; --slab-out: #18153A; --slab-line: #3B3575;
+    --mint: #5FD39C; --mint-bg: #173A2C; --rose: #FF8FA2; --rose-bg: #3C1D2A;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+code, pre, .cm-content, .cm-gutters, .fname, .keys button, .ans input, .opt .v, .l-sub, .ln .c, .ln .php { font-variant-ligatures: none; font-feature-settings: 'liga' 0, 'calt' 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--sans); font-size: 17px; line-height: 1.6;
+  font-optical-sizing: auto; -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--ochre); outline-offset: 2px; border-radius: 8px; }
+.wrap { max-width: 640px; margin: 0 auto; padding: calc(var(--safe-t) + 12px) 18px calc(var(--tabs-h) + var(--safe-b) + 32px); }
+
+/* Inline-Code im Fließtext */
+.prose code, .q-t code, .why code, .verdict code, .hint code, .tip code, .lede code, .task-text code, .testinfo code {
+  font-family: var(--mono); font-size: .84em; background: rgba(136,146,191,.2);
+  color: var(--elephant-d); padding: .08em .36em; border-radius: 6px; white-space: break-spaces;
+}
+.prose { margin: 0 0 14px; max-width: 36em; }
+
+/* ---------- Startseite ---------- */
+.hero { padding: 18px 2px 22px; }
+.hero h1 {
+  margin: 0; font-size: clamp(60px, 19vw, 96px); line-height: .86; font-weight: 800;
+  letter-spacing: -.04em; font-variation-settings: 'wdth' 75, 'opsz' 96;
+}
+.caret { display: inline-block; width: .36em; height: .78em; margin-left: .06em; background: var(--ochre); vertical-align: -.02em; border-radius: 3px; animation: blink 1s steps(1) 4; }
+@keyframes blink { 50% { opacity: 0; } }
+.lede { margin: 16px 0 22px; font-size: 18px; color: var(--ink-2); max-width: 24em; }
+.stats { display: flex; gap: 28px; align-items: baseline; }
+.stat b { display: block; font-size: 34px; line-height: 1; font-weight: 750; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.stat span { font-size: 14px; color: var(--ink-2); }
+.meter { height: 6px; border-radius: 6px; background: var(--paper-2); margin: 16px 0 20px; overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--elephant); border-radius: 6px; transition: width .6s ease; }
+.cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
+  min-height: 58px; padding: 0 22px; border-radius: 18px; border: 0; cursor: pointer;
+  background: var(--ochre); color: var(--ochre-ink); font-weight: 700; font-size: 18px; text-decoration: none;
+  box-shadow: 0 2px 0 rgba(43,32,0,.25);
+}
+.cta small { font-weight: 500; opacity: .8; font-size: 15px; }
+.cta:active { transform: translateY(1px); box-shadow: none; }
+.cta svg { flex: none; }
+
+.file { margin: 26px -6px 0; background: var(--slab); color: var(--slab-ink); border-radius: 22px; overflow: hidden; }
+.file-tab { display: flex; align-items: center; gap: 8px; padding: 12px 18px; font-family: var(--mono); font-size: 13px; color: var(--slab-mute); border-bottom: 1px solid var(--slab-line); }
+.file-tab .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--elephant); }
+.lines { list-style: none; margin: 0; padding: 8px 0 12px; }
+.ln { display: grid; grid-template-columns: 46px 1fr auto; align-items: center; min-height: 48px; padding: 8px 16px 8px 0; text-decoration: none; position: relative; }
+.ln .g { font-family: var(--mono); font-size: 13px; color: #6E6A99; text-align: right; padding-right: 14px; align-self: start; padding-top: 5px; }
+.ln .t { display: block; font-size: 19px; font-weight: 650; line-height: 1.25; letter-spacing: -.01em; }
+.ln .c { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--slab-mute); font-style: italic; margin-top: 2px; }
+.ln .php { font-family: var(--mono); font-size: 15px; color: var(--elephant); font-weight: 600; }
+.ln.end .c { margin: 0; }
+a.ln:active { background: rgba(136,146,191,.14); }
+.ln.next { background: rgba(136,146,191,.16); }
+.ln.next::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 0 3px 3px 0; background: var(--ochre); }
+.ln.next .g { color: var(--ochre); }
+.ln.done .t { color: #CFCBEA; }
+.st { display: flex; gap: 5px; align-items: center; }
+.pip { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #5E5990; }
+.pip.on { background: var(--mint-l); border-color: var(--mint-l); }
+.check { width: 26px; height: 26px; border-radius: 50%; background: var(--mint-l); color: #10291E; display: grid; place-items: center; }
+
+/* ---------- Kopfleiste ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin: calc(-1 * (var(--safe-t) + 12px)) -18px 0; padding: calc(var(--safe-t) + 8px) 12px 8px 6px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.back { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; padding: 0 10px; text-decoration: none; font-weight: 600; color: var(--elephant-d); }
+.engine { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-2); padding: 6px 12px; border-radius: 99px; background: var(--paper-2); white-space: nowrap; }
+.engine i { width: 8px; height: 8px; border-radius: 50%; background: #A3A0C2; }
+.engine[data-s="loading"] i { background: var(--ochre); animation: pulse 1s ease-in-out infinite; }
+.engine[data-s="ready"] i { background: var(--mint); }
+.engine[data-s="failed"] i { background: var(--rose); }
+@keyframes pulse { 50% { opacity: .3; } }
+
+/* ---------- Lektion ---------- */
+.l-head { padding: 22px 0 18px; }
+.l-num { font-family: var(--mono); font-size: 15px; color: var(--elephant-d); font-weight: 600; }
+.l-head h1 { margin: 4px 0 6px; font-size: clamp(36px, 10.5vw, 52px); line-height: .98; font-weight: 800; letter-spacing: -.03em; font-variation-settings: 'wdth' 80, 'opsz' 72; }
+.l-sub { margin: 0; color: var(--ink-2); font-family: var(--mono); font-size: 13px; }
+h2.sec { margin: 40px 0 6px; font-size: 28px; line-height: 1.1; font-weight: 800; letter-spacing: -.02em; font-variation-settings: 'wdth' 85; display: flex; align-items: center; gap: 10px; }
+h2.sec .badge { font-size: 13px; font-weight: 700; letter-spacing: 0; padding: 4px 10px; border-radius: 99px; background: var(--mint-bg); color: var(--mint); font-variation-settings: normal; }
+.tip { margin: 6px 0 18px; padding: 14px 16px; border-radius: 14px; background: var(--paper-2); border-left: 4px solid var(--elephant); font-size: 16px; }
+
+/* Code-Fläche */
+.slab { margin: 12px -6px 20px; background: var(--slab); border-radius: 18px; overflow: hidden; color: var(--slab-ink); }
+.slab.static { margin: 10px 0 12px; border-radius: 14px; }
+.slab.static .ed .cm-content { padding: 12px 14px; }
+.slab-bar { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px 4px 16px; border-bottom: 1px solid var(--slab-line); min-height: 42px; }
+.fname { font-family: var(--mono); font-size: 12.5px; color: var(--slab-mute); }
+.ghost { background: none; border: 0; color: var(--slab-mute); font-size: 14px; padding: 8px 10px; min-height: 36px; border-radius: 10px; cursor: pointer; }
+.ghost:active { background: rgba(255,255,255,.06); }
+.ed { min-height: 40px; }
+.ed .cm-editor { max-height: 70vh; }
+.slab-foot { display: flex; align-items: center; gap: 8px; padding: 10px; border-top: 1px solid var(--slab-line); flex-wrap: wrap; }
+.run {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 20px; border: 0; border-radius: 99px; cursor: pointer;
+  background: var(--ochre); color: var(--ochre-ink); font-weight: 700; font-size: 16px;
+}
+.run:disabled { opacity: .7; cursor: progress; }
+.run:active { transform: scale(.97); }
+.sbtn { min-height: 46px; padding: 0 16px; border-radius: 99px; border: 1px solid var(--slab-line); background: transparent; color: var(--slab-ink); font-weight: 600; font-size: 15px; cursor: pointer; }
+.sbtn:active { background: rgba(255,255,255,.06); }
+.spin { width: 15px; height: 15px; border-radius: 50%; border: 2.5px solid currentColor; border-right-color: transparent; animation: rot .7s linear infinite; }
+@keyframes rot { to { transform: rotate(360deg); } }
+.out { background: var(--slab-out); border-top: 1px solid var(--slab-line); padding: 12px 16px 14px; }
+.out-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--slab-mute); margin-bottom: 6px; }
+.out pre { margin: 0; font-family: var(--mono); font-size: 14.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--slab-ink); }
+.out pre .err { color: var(--rose-l); }
+.out pre .empty { color: var(--slab-mute); font-style: italic; }
+.out .explain { margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; background: rgba(255,154,171,.12); color: #FFD3DB; font-size: 15px; line-height: 1.45; }
+.out .explain code { font-family: var(--mono); font-size: .9em; color: #fff; }
+
+/* Aufgabe */
+.task-text { margin: 4px 0 6px; font-size: 18px; max-width: 34em; }
+.testinfo { margin: 0 0 4px; font-size: 14px; color: var(--ink-2); }
+.verdict { margin: -8px 0 20px; padding: 16px; border-radius: 16px; font-size: 16px; position: relative; }
+.verdict.bad { background: var(--rose-bg); color: var(--ink); }
+.verdict.bad strong { color: var(--rose); }
+.verdict.good { background: var(--mint-bg); display: flex; align-items: center; gap: 14px; }
+.stamp {
+  flex: none; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%;
+  border: 3px solid var(--mint); color: var(--mint); font-weight: 800; font-size: 13px; transform: rotate(-12deg);
+  font-variation-settings: 'wdth' 75; text-align: center; line-height: 1.05;
+}
+.verdict.good.fresh .stamp { animation: stamp .55s cubic-bezier(.2, 1.5, .35, 1) both; }
+@keyframes stamp { from { transform: scale(2.2) rotate(-30deg); opacity: 0; } to { transform: scale(1) rotate(-12deg); opacity: 1; } }
+.verdict.good b { display: block; font-size: 20px; color: var(--mint); }
+.diff { margin-top: 10px; display: grid; gap: 8px; }
+.diff div { background: var(--card); border-radius: 10px; padding: 8px 12px; }
+.diff span { display: block; font-size: 12.5px; color: var(--ink-2); }
+.verdict .diff code { display: block; font-family: var(--mono); font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; background: none; padding: 0; color: var(--ink); }
+.hint { margin: -6px 0 18px; padding: 14px 16px; border-radius: 14px; background: var(--paper-2); font-size: 16px; }
+.solution-wrap h3 { margin: 4px 0 0; font-size: 16px; }
+
+/* Quiz */
+.q { padding: 20px 0 8px; border-top: 1px solid var(--rule); }
+.q:first-of-type { border-top: 0; }
+.q-t { margin: 0 0 10px; font-weight: 650; font-size: 18px; line-height: 1.35; }
+.q-n { font-family: var(--mono); color: var(--elephant-d); font-size: 14px; margin-right: 6px; font-weight: 600; }
+.opts { display: grid; gap: 8px; }
+.opt {
+  display: flex; align-items: center; gap: 12px; text-align: left; width: 100%; min-height: 54px; padding: 12px 16px;
+  background: var(--card); border: 1.5px solid var(--rule); border-radius: 14px; cursor: pointer; font-size: 16.5px;
+}
+.opt .k { flex: none; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: var(--paper-2); font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.opt .v { font-family: var(--mono); font-size: 15px; }
+.opt .v.txt { font-family: var(--sans); font-size: 16.5px; }
+.opt:active:not(:disabled) { transform: scale(.99); }
+.opt:disabled { cursor: default; }
+.opt.right { border-color: var(--mint); background: var(--mint-bg); }
+.opt.right .k { background: var(--mint); color: #fff; }
+.opt.wrong { border-color: var(--rose); background: var(--rose-bg); }
+.opt.wrong .k { background: var(--rose); color: #fff; }
+.ans { display: flex; gap: 8px; }
+.ans input {
+  flex: 1; min-width: 0; min-height: 54px; padding: 0 16px; border-radius: 14px; border: 1.5px solid var(--rule);
+  background: var(--card); color: var(--ink); font-family: var(--mono); font-size: 16px;
+}
+.ans input:focus { outline: none; border-color: var(--elephant); box-shadow: 0 0 0 3px rgba(136,146,191,.3); }
+.ans input.right { border-color: var(--mint); background: var(--mint-bg); }
+.ans input.wrong { border-color: var(--rose); background: var(--rose-bg); }
+.ans button { min-height: 54px; padding: 0 18px; border: 0; border-radius: 14px; background: var(--ink); color: var(--paper); font-weight: 700; cursor: pointer; }
+.ans button:disabled { opacity: .4; }
+.why { margin: 10px 0 0; font-size: 15.5px; color: var(--ink-2); }
+.why strong.ok { color: var(--mint); }
+.why strong.no { color: var(--rose); }
+.why .tryrun { margin-left: 4px; background: none; border: 0; padding: 4px 0; color: var(--elephant-d); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: 15.5px; }
+.q .out { border-radius: 12px; margin-top: 10px; border: 0; background: var(--slab-out); }
+.score { margin: 18px 0 8px; padding: 18px; border-radius: 16px; background: var(--paper-2); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.score b { font-size: 22px; letter-spacing: -.01em; }
+.score.pass { background: var(--mint-bg); }
+.score.pass b { color: var(--mint); }
+.btn2 { min-height: 46px; padding: 0 18px; border-radius: 99px; border: 1.5px solid var(--ink); background: transparent; font-weight: 700; cursor: pointer; }
+
+.l-next { margin-top: 36px; }
+
+/* Spielwiese */
+.play-head h1 { margin: 22px 0 4px; font-size: clamp(44px, 13vw, 64px); line-height: .95; font-weight: 800; letter-spacing: -.035em; font-variation-settings: 'wdth' 75, 'opsz' 96; }
+.play-head p { margin: 0 0 14px; color: var(--ink-2); }
+.chips { display: flex; gap: 8px; overflow-x: auto; margin: 0 -18px; padding: 4px 18px 6px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; min-height: 40px; padding: 0 16px; border-radius: 99px; border: 1.5px solid var(--rule); background: var(--card); font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.chip:active { background: var(--paper-2); }
+.slab.big .ed .cm-editor { min-height: 38vh; }
+
+/* Untere Navigation */
+.tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: flex; justify-content: center; gap: 6px;
+  padding: 8px 12px calc(8px + var(--safe-b));
+  background: color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--rule);
+}
+.tabs a { flex: 1; max-width: 220px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; border-radius: 14px; text-decoration: none; font-size: 12.5px; font-weight: 650; color: var(--ink-2); }
+.tabs a[aria-current="page"] { color: var(--elephant-d); background: var(--paper-2); }
+body.typing .tabs { display: none; }
+
+/* Symbolleiste über der Tastatur */
+.keybar {
+  position: fixed; left: 0; right: 0; top: 0; z-index: 40; display: flex; align-items: center; gap: 6px;
+  padding: 7px 8px; background: #2B2657; border-top: 1px solid #4A4488; visibility: hidden;
+}
+.keybar.on { visibility: visible; }
+.cm-editor:not(.cm-focused) .cm-activeLine { background: transparent !important; }
+.cm-editor:not(.cm-focused) .cm-activeLineGutter { color: inherit !important; }
+.keys { display: flex; gap: 6px; overflow-x: auto; flex: 1; scrollbar-width: none; }
+.keys::-webkit-scrollbar { display: none; }
+.keys button, .kb-act {
+  flex: none; min-width: 42px; height: 40px; padding: 0 10px; border-radius: 10px; border: 0; cursor: pointer;
+  background: #3C367A; color: #F2F0FF; font-family: var(--mono); font-size: 16px; font-weight: 600;
+}
+.keys button:active { background: #5A53A8; }
+.kb-act.go { background: var(--ochre); color: var(--ochre-ink); font-family: var(--sans); font-size: 15px; }
+.kb-act.done { background: transparent; color: #CFCBEA; font-family: var(--sans); font-size: 15px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--tabs-h) + var(--safe-b) + 16px); z-index: 50;
+  transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+  background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 99px; font-weight: 700; font-size: 16px;
+  transition: opacity .25s, transform .25s; white-space: nowrap;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+.fail-box { margin: 12px 0; padding: 14px 16px; border-radius: 14px; background: var(--rose-bg); font-size: 15.5px; }
+.fail-box button { margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@media (min-width: 700px) {
+  .slab { margin-left: 0; margin-right: 0; }
+  .file { margin-left: 0; margin-right: 0; }
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<nav class="tabs" aria-label="Hauptnavigation">
+  <a href="#" data-tab="kurs">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h8M4 6h.01M4 12h.01M4 18h.01"/></svg>
+    Kurs
+  </a>
+  <a href="#spielwiese" data-tab="play">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12"/></svg>
+    Spielwiese
+  </a>
+</nav>
+
+<div class="keybar" id="keybar" role="toolbar" aria-label="Sonderzeichen">
+  <div class="keys" id="keys"></div>
+  <button class="kb-act go" id="kbRun" type="button">▶</button>
+  <button class="kb-act done" id="kbDone" type="button">Fertig</button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { createEditor, insertAtCursor, setDoc } from './editor.js';
+import { LESSONS, SNIPPETS } from './lessons.js';
+import { prepareTask, evaluateTask, cleanOutput, explainError, sameAnswer, MARK } from './checker.js';
+
+/* ---------- Hilfen ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function md(s) {
+  const codes = [];
+  let h = esc(s).replace(/`([^`]+)`/g, (_, c) => { codes.push(c); return `\u0001${codes.length - 1}\u0001`; });
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/&lt;br&gt;/g, '<br>');
+  return h.replace(/\u0001(\d+)\u0001/g, (_, i) => `<code>${codes[i]}</code>`);
+}
+const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
+const ICON_PLAY = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.8v10.4c0 .6.7 1 1.2.6l8-5.2c.5-.3.5-1 0-1.3l-8-5.2C3.7.8 3 1.2 3 1.8z" fill="currentColor"/></svg>';
+const ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_ARROW = '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M4 11h13M12 5l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2200);
+}
+
+/* ---------- Fortschritt (nur in diesem Browser) ---------- */
+const KEY = 'php-lernen-v2';
+const store = (() => {
+  let d = {};
+  try { d = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { d = {}; }
+  d.task ||= {}; d.quiz ||= {}; d.code ||= {}; d.peek ||= {};
+  return d;
+})();
+let saveTimer;
+function save(now) {
+  const write = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch {} };
+  clearTimeout(saveTimer);
+  if (now) write(); else saveTimer = setTimeout(write, 400);
+}
+// Beim Verlassen/Wegwischen sofort speichern, damit nichts verloren geht
+addEventListener('pagehide', () => save(true));
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(true); });
+const xp = () => Object.values(store.task).reduce((a, b) => a + (+b || 0), 0)
+  + Object.values(store.quiz).reduce((a, q) => a + (q.best || 0) * 10, 0);
+const lessonDone = (l) => !!store.task[l.id] && !!store.quiz[l.id]?.passed;
+
+/* ---------- PHP-Engine (Web Worker mit Zeitlimit) ---------- */
+const TIME_LIMIT = 5000;
+const engine = {
+  state: 'idle', listeners: new Set(), pending: new Map(), seq: 0, worker: null, readyP: null,
+  on(fn) { this.listeners.add(fn); fn(this.state); return () => this.listeners.delete(fn); },
+  set(s, info) { this.state = s; this.info = info; this.listeners.forEach((f) => f(s, info)); },
+  start() {
+    if (this.readyP) return this.readyP;
+    this.set('loading');
+    this.readyP = new Promise((resolve, reject) => {
+      let w;
+      try { w = new Worker(new URL('./php-worker.js', import.meta.url), { type: 'module' }); }
+      catch (e) { this.set('failed', e.message); reject(e); return; }
+      this.worker = w;
+      const boot = setTimeout(() => { this.set('failed', 'Laden dauert zu lange'); reject(new Error('timeout')); }, 120000);
+      w.onmessage = (ev) => {
+        const m = ev.data || {};
+        if (m.type === 'ready') { clearTimeout(boot); this.set('ready'); resolve(); }
+        else if (m.type === 'fatal') { clearTimeout(boot); this.set('failed', m.message); reject(new Error(m.message)); }
+        else if (m.type === 'result') {
+          const p = this.pending.get(m.id);
+          if (p) { this.pending.delete(m.id); clearTimeout(p.timer); p.resolve({ output: m.output, ms: m.ms }); }
+        }
+      };
+      w.onerror = (e) => { clearTimeout(boot); this.set('failed', e.message || 'Worker-Fehler'); reject(new Error(e.message)); };
+    });
+    this.readyP.catch(() => {});
+    return this.readyP;
+  },
+  reset() {
+    try { this.worker && this.worker.terminate(); } catch {}
+    this.worker = null; this.readyP = null;
+    for (const p of this.pending.values()) { clearTimeout(p.timer); p.resolve({ output: '', timeout: true }); }
+    this.pending.clear();
+  },
+  async run(code) {
+    await this.start();
+    return new Promise((resolve) => {
+      const id = ++this.seq;
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        resolve({ output: '', timeout: true });
+        this.reset(); this.start();
+      }, TIME_LIMIT);
+      this.pending.set(id, { resolve, timer });
+      this.worker.postMessage({ id, code });
+    });
+  },
+};
+window.__engine = engine;
+
+function enginePill() {
+  const p = el('<span class="engine" role="status"><i></i><span></span></span>');
+  const label = { idle: 'PHP 8.4', loading: 'PHP startet…', ready: 'PHP 8.4 bereit', failed: 'PHP offline' };
+  const off = engine.on((s) => { p.dataset.s = s; p.lastChild.textContent = label[s]; });
+  cleanups.push(off);
+  return p;
+}
+
+/* ---------- Editoren & Symbolleiste ---------- */
+let views = [], cleanups = [];
+let active = null; // { view, run }
+const KEYS = [['⇥', '    '], ['$', '$'], [';', ';'], ['"', '""', 1], ["'", "''", 1], ['( )', '()', 1], ['{ }', '{}', 1], ['[ ]', '[]', 1],
+  ['->', '->'], ['=>', '=>'], ['.', '.'], ['=', '='], ['<', '<'], ['>', '>'], ['!', '!'], ['&&', ' && '], ['||', ' || '], ['?', '?'], [':', ':'],
+  ['%', '%'], ['\\n', '\\n'], ['_', '_'], ['<?php', '<?php\n']];
+const keybar = $('#keybar');
+$('#keys').append(...KEYS.map(([label, text, off]) => {
+  const b = el(`<button type="button" aria-label="${esc(label)} einfügen">${esc(label)}</button>`);
+  b.addEventListener('pointerdown', (e) => e.preventDefault());
+  b.addEventListener('click', () => active && insertAtCursor(active.view, text, off ?? text.length));
+  return b;
+}));
+for (const b of [$('#kbRun'), $('#kbDone')]) b.addEventListener('pointerdown', (e) => e.preventDefault());
+$('#kbRun').addEventListener('click', () => { if (active) { const a = active; a.view.contentDOM.blur(); a.run(); } });
+$('#kbDone').addEventListener('click', () => active && active.view.contentDOM.blur());
+function placeKeybar() {
+  const vv = window.visualViewport;
+  const h = keybar.offsetHeight;
+  const top = vv ? vv.offsetTop + vv.height - h : window.innerHeight - h;
+  keybar.style.top = Math.max(0, top) + 'px';
+}
+window.visualViewport?.addEventListener('resize', placeKeybar);
+window.visualViewport?.addEventListener('scroll', placeKeybar);
+let blurTimer;
+function editorFocus(view, run) {
+  clearTimeout(blurTimer);
+  active = { view, run };
+  document.body.classList.add('typing'); keybar.classList.add('on'); placeKeybar();
+  setTimeout(placeKeybar, 300);
+}
+function editorBlur(view) {
+  blurTimer = setTimeout(() => {
+    if (active && active.view === view) active = null;
+    if (!active) { document.body.classList.remove('typing'); keybar.classList.remove('on'); }
+  }, 120);
+}
+
+function staticCode(code) {
+  const box = el('<div class="slab static"><div class="ed"></div></div>');
+  views.push(createEditor($('.ed', box), code, { readOnly: true }));
+  return box;
+}
+
+function renderOutput(outBox, res) {
+  const pre = $('pre', outBox), ms = $('.ms', outBox), ex = $('.explain', outBox);
+  outBox.hidden = false;
+  if (res.timeout) {
+    pre.innerHTML = '<span class="err">Abgebrochen nach 5 Sekunden.</span>';
+    ex.hidden = false; ex.innerHTML = md('Wahrscheinlich eine Endlosschleife: Prüfe, ob die Bedingung irgendwann `false` wird.');
+    ms.textContent = ''; return;
+  }
+  const out = cleanOutput(res.output);
+  if (!out.length) pre.innerHTML = '<span class="empty">(keine Ausgabe)</span>';
+  else pre.innerHTML = esc(out).replace(/^((?:Fatal error|Parse error|Warning|Notice|Deprecated):.*)$/gm, '<span class="err">$1</span>');
+  const why = /(Fatal error|Parse error|Warning|Notice|Deprecated):/.test(out) ? explainError(out) : null;
+  ex.hidden = !why; if (why) ex.innerHTML = md(why);
+  ms.textContent = res.ms != null ? `${res.ms} ms` : '';
+}
+
+const outHTML = '<div class="out" hidden><div class="out-label"><span>Ausgabe</span><span class="ms"></span></div><pre></pre><p class="explain" hidden></p></div>';
+
+function runButtonState(btn, busy, label) {
+  btn.disabled = busy;
+  btn.innerHTML = busy ? `<span class="spin" aria-hidden="true"></span>${engine.state === 'ready' ? 'Läuft…' : 'PHP startet…'}` : `${label === 'Prüfen' ? ICON_CHECK : ICON_PLAY}${label}`;
+}
+
+function failBox(container) {
+  if ($('.fail-box', container)) return;
+  const f = el(`<div class="fail-box">PHP konnte auf diesem Gerät nicht starten. Prüfe die Internetverbindung (einmalig ca. 13 MB) und versuch es erneut.<br><button class="btn2" type="button">Neu laden</button></div>`);
+  $('button', f).onclick = () => { engine.reset(); engine.start(); f.remove(); };
+  container.append(f);
+}
+
+// Ausführbares Beispiel
+function runnable(code, { fname = 'beispiel.php', big = false, storeKey = null, placeholder } = {}) {
+  const initial = storeKey && store.code[storeKey] != null ? store.code[storeKey] : code;
+  const box = el(`<figure class="slab${big ? ' big' : ''}" style="margin-block:12px 20px">
+    <div class="slab-bar"><span class="fname">${esc(fname)}</span><button class="ghost reset" type="button"${initial === code ? ' hidden' : ''}>Zurücksetzen</button></div>
+    <div class="ed"></div>
+    <div class="slab-foot"><button class="run" type="button">${ICON_PLAY}Ausführen</button></div>
+    ${outHTML}
+  </figure>`);
+  const runBtn = $('.run', box), resetBtn = $('.reset', box), outBox = $('.out', box);
+  let action;
+  const doRun = async () => {
+    runButtonState(runBtn, true);
+    try { renderOutput(outBox, await engine.run(view.state.doc.toString())); }
+    catch { failBox(box); }
+    runButtonState(runBtn, false, 'Ausführen');
+  };
+  const view = createEditor($('.ed', box), initial, {
+    hint: placeholder, onRun: () => action(),
+    onChange: (d) => { resetBtn.hidden = d === code; if (storeKey) { store.code[storeKey] = d; save(); } },
+    onFocus: (v) => { editorFocus(v, () => action()); engine.start(); },
+    onBlur: editorBlur,
+  });
+  views.push(view);
+  action = doRun;
+  box._setAction = (fn) => { action = fn; };
+  runBtn.onclick = () => action();
+  resetBtn.onclick = () => { setDoc(view, code); outBox.hidden = true; };
+  box._view = view;
+  return box;
+}
+
+/* ---------- Startseite ---------- */
+function showHome() {
+  const done = LESSONS.filter(lessonDone).length;
+  const next = LESSONS.findIndex((l) => !lessonDone(l));
+  const started = Object.keys(store.task).length + Object.keys(store.quiz).length > 0;
+  const cta = next === -1
+    ? `<a class="cta" href="#spielwiese"><span>Alles geschafft! <small>Weiter auf der Spielwiese</small></span>${ICON_ARROW}</a>`
+    : `<a class="cta" href="#lektion-${next + 1}"><span>${started ? 'Weiter' : 'Los geht’s'} <small>mit ${esc(LESSONS[next].title)}</small></span>${ICON_ARROW}</a>`;
+  const app = $('#app');
+  app.innerHTML = `
+    <header class="hero">
+      <h1>PHP<br>lernen<span class="caret" aria-hidden="true"></span></h1>
+      <p class="lede">Echter PHP-Code, direkt auf deinem Handy. Lesen, ausprobieren, Aufgaben lösen.</p>
+      <div class="stats">
+        <div class="stat"><b>${done}<span style="font-size:20px;color:var(--ink-2)">/${LESSONS.length}</span></b><span>Lektionen geschafft</span></div>
+        <div class="stat"><b>${xp()}</b><span>XP gesammelt</span></div>
+      </div>
+      <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="${LESSONS.length}" aria-valuenow="${done}" aria-label="Kursfortschritt"><i style="width:${(done / LESSONS.length) * 100}%"></i></div>
+      ${cta}
+    </header>
+    <section class="file" aria-label="Lektionen">
+      <div class="file-tab"><span class="dot"></span>kurs.php</div>
+      <ol class="lines">
+        <li class="ln" aria-hidden="true"><span class="g"></span><span class="php">&lt;?php</span></li>
+        ${LESSONS.map((l, i) => {
+          const d = lessonDone(l), t = !!store.task[l.id], q = !!store.quiz[l.id]?.passed;
+          const st = d ? `<span class="check" aria-label="geschafft">${ICON_CHECK}</span>`
+            : `<span class="st" aria-label="Aufgabe ${t ? 'gelöst' : 'offen'}, Quiz ${q ? 'bestanden' : 'offen'}"><span class="pip${t ? ' on' : ''}"></span><span class="pip${q ? ' on' : ''}"></span></span>`;
+          return `<li><a class="ln${d ? ' done' : ''}${i === next ? ' next' : ''}" href="#lektion-${i + 1}">
+            <span class="g">${i + 1}</span>
+            <span><span class="t">${esc(l.title)}</span><span class="c">// ${esc(l.sub)}</span></span>
+            ${st}</a></li>`;
+        }).join('')}
+        <li class="ln end" aria-hidden="true"><span class="g"></span><span class="c">// Danach: freies Coden auf der Spielwiese</span></li>
+      </ol>
+    </section>
+    <p style="margin:22px 2px 0;font-size:13px;color:var(--ink-2)">PHP 8.4 läuft per WebAssembly direkt im Browser (php-wasm, Apache-2.0). Editor: CodeMirror (MIT). Dein Fortschritt bleibt nur in diesem Browser gespeichert.</p>`;
+}
+
+/* ---------- Lektion ---------- */
+function showLesson(i) {
+  const l = LESSONS[i];
+  if (!l) { location.hash = ''; return; }
+  engine.start();
+  const app = $('#app');
+  app.innerHTML = `
+    <div class="topbar"><a class="back" href="#"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M14 4l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Kurs</a></div>
+    <header class="l-head"><span class="l-num">Lektion ${i + 1} von ${LESSONS.length}</span><h1>${esc(l.title)}</h1><p class="l-sub">// ${esc(l.sub)}</p></header>
+    <div class="blocks"></div>`;
+  $('.topbar', app).append(enginePill());
+  const blocks = $('.blocks', app);
+  let n = 0;
+  for (const b of l.blocks) {
+    if (b.p) blocks.append(el(`<p class="prose">${md(b.p)}</p>`));
+    else if (b.tip) blocks.append(el(`<p class="tip">${md(b.tip)}</p>`));
+    else if (b.code) blocks.append(runnable(b.code, { fname: `beispiel-${++n}.php` }));
+  }
+  blocks.append(taskSection(l), quizSection(l));
+  const nx = LESSONS[i + 1];
+  blocks.append(el(`<nav class="l-next">${nx
+    ? `<a class="cta" href="#lektion-${i + 2}"><span>Nächste Lektion <small>${esc(nx.title)}</small></span>${ICON_ARROW}</a>`
+    : `<a class="cta" href="#spielwiese"><span>Kurs beendet <small>Ab auf die Spielwiese</small></span>${ICON_ARROW}</a>`}</nav>`));
+}
+
+function taskSection(l) {
+  const t = l.task;
+  const sec = el(`<section aria-labelledby="t-${l.id}">
+    <h2 class="sec" id="t-${l.id}">Deine Aufgabe${store.task[l.id] ? ' <span class="badge">gelöst</span>' : ''}</h2>
+    <p class="task-text">${md(t.text)}</p>
+    ${t.testInfo ? `<p class="testinfo">${md(t.testInfo)}</p>` : ''}
+  </section>`);
+  const key = 'task:' + l.id;
+  const box = runnable(t.starter, { fname: 'aufgabe.php', storeKey: key });
+  const foot = $('.slab-foot', box);
+  const runBtn = $('.run', box);
+  runBtn.innerHTML = `${ICON_CHECK}Prüfen`;
+  const hintBtn = el('<button class="sbtn" type="button">Tipp</button>');
+  const solBtn = el('<button class="sbtn" type="button">Lösung</button>');
+  foot.append(hintBtn, solBtn);
+  sec.append(box);
+  const verdict = el('<div class="verdict" hidden aria-live="polite"></div>');
+  const hint = el(`<p class="hint" hidden>${md('**Tipp:** ' + t.hint)}</p>`);
+  const solWrap = el('<div class="solution-wrap" hidden></div>');
+  sec.append(verdict, hint, solWrap);
+  const view = box._view, outBox = $('.out', box);
+
+  const showGood = (fresh) => {
+    verdict.hidden = false; verdict.className = 'verdict good' + (fresh ? ' fresh' : '');
+    verdict.innerHTML = `<span class="stamp">GE-<br>LÖST</span><span><b>Richtig gelöst!</b>${fresh ? `+${store.task[l.id]} XP. ` : ''}Weiter geht’s mit dem Quiz.</span>`;
+  };
+  if (store.task[l.id]) showGood(false);
+
+  const check = async () => {
+    const code = view.state.doc.toString();
+    const prep = prepareTask(t, code);
+    verdict.hidden = false;
+    if (prep.error) { verdict.className = 'verdict bad'; verdict.innerHTML = md(prep.error); return; }
+    runButtonState(runBtn, true);
+    const results = [];
+    try { for (const r of prep.runs) results.push(await engine.run(r.code)); }
+    catch { runButtonState(runBtn, false, 'Prüfen'); verdict.hidden = true; failBox(sec); return; }
+    runButtonState(runBtn, false, 'Prüfen');
+    const ev = evaluateTask(t, code, prep.runs, results);
+    // Ausgabe zeigen: bei Test-Aufgaben nur den Teil des Schülers
+    const shown = ev.details.find((d) => !d.ok) || ev.details[0];
+    let out = shown.output;
+    const at = out.indexOf(MARK);
+    if (at >= 0) out = shown.fatal ? out.slice(0, at) + out.slice(at + MARK.length).replace(/^\n/, '') : out.slice(0, at);
+    renderOutput(outBox, shown.timeout ? { timeout: true } : { output: out.replace(/\n+$/, '') });
+    if (ev.ok) {
+      const first = !store.task[l.id];
+      if (first) { store.task[l.id] = store.peek[l.id] ? 10 : 30; save(true); toast(`+${store.task[l.id]} XP`); $('h2.sec', sec).innerHTML = 'Deine Aufgabe <span class="badge">gelöst</span>'; }
+      showGood(first);
+      return;
+    }
+    verdict.className = 'verdict bad';
+    const bad = ev.details.find((d) => !d.ok);
+    const diff = bad && !bad.fatal && !bad.timeout
+      ? `<div class="diff"><div><span>Erwartet${bad.label ? ` bei ${esc(bad.label)}` : ''}</span><code>${esc(bad.expected)}</code></div><div><span>Dein Ergebnis</span><code>${bad.got ? esc(bad.got) : '(nichts)'}</code></div></div>` : '';
+    verdict.innerHTML = `<strong>Noch nicht ganz.</strong> ${md(ev.message)}${diff}`;
+  };
+  box._setAction(check); // Prüfen statt nur Ausführen, auch für ▶ und Strg+Enter
+  hintBtn.onclick = () => { hint.hidden = !hint.hidden; };
+  solBtn.onclick = () => {
+    if (!solWrap.hidden) { solWrap.hidden = true; return; }
+    store.peek[l.id] = true; save();
+    solWrap.innerHTML = '<h3>Eine mögliche Lösung</h3>';
+    solWrap.append(staticCode(t.solution));
+    const take = el('<button class="btn2" type="button" style="margin-bottom:18px">In den Editor übernehmen</button>');
+    take.onclick = () => { setDoc(view, t.solution); view.focus(); };
+    solWrap.append(take);
+    solWrap.hidden = false;
+  };
+  return sec;
+}
+
+function quizSection(l) {
+  const qs = l.quiz;
+  const need = Math.ceil(qs.length * 0.75);
+  const prev = store.quiz[l.id];
+  const sec = el(`<section aria-labelledby="q-${l.id}"><h2 class="sec" id="q-${l.id}">Quiz${prev?.passed ? ' <span class="badge">bestanden</span>' : ''}</h2>
+    <p class="prose" style="color:var(--ink-2)">${qs.length} Fragen. Bestanden ab ${need} richtigen.</p><div class="qs"></div><div class="score" hidden></div></section>`);
+  const list = $('.qs', sec), score = $('.score', sec);
+  let answered = 0, correct = 0;
+
+  const finish = () => {
+    const passed = correct >= need;
+    const old = store.quiz[l.id] || {};
+    store.quiz[l.id] = { best: Math.max(old.best || 0, correct), passed: old.passed || passed };
+    save(true);
+    const gained = Math.max(0, correct - (old.best || 0)) * 10;
+    if (gained) toast(`+${gained} XP`);
+    if (passed) $('h2.sec', sec).innerHTML = 'Quiz <span class="badge">bestanden</span>';
+    score.hidden = false; score.className = 'score' + (passed ? ' pass' : '');
+    score.innerHTML = `<b>${correct} von ${qs.length} richtig</b><span>${passed ? (lessonDone(l) ? 'Lektion geschafft!' : 'Bestanden! Löse noch die Aufgabe.') : `Für das Bestehen brauchst du ${need}.`}</span>`;
+    const again = el('<button class="btn2" type="button">Quiz wiederholen</button>');
+    again.onclick = () => { const fresh = quizSection(l); sec.replaceWith(fresh); fresh.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    score.append(again);
+  };
+  const settle = (ok) => { answered++; if (ok) correct++; if (answered === qs.length) finish(); };
+
+  qs.forEach((q, qi) => {
+    const box = el(`<div class="q"><p class="q-t"><span class="q-n">${qi + 1}.</span>${md(q.q)}</p></div>`);
+    if (q.code) box.append(staticCode(q.code));
+    const why = el('<p class="why" hidden aria-live="polite"></p>');
+    if (q.options) {
+      const isCode = q.options.every((o) => /[$<>;()\[\]=.:#\/*]|^(true|false|null)$/.test(o));
+      const opts = el('<div class="opts"></div>');
+      q.options.forEach((o, oi) => {
+        const b = el(`<button class="opt" type="button"><span class="k">${'ABCD'[oi]}</span><span class="v${isCode ? '' : ' txt'}">${esc(o)}</span></button>`);
+        b.onclick = () => {
+          const ok = oi === q.answer;
+          [...opts.children].forEach((x, xi) => { x.disabled = true; if (xi === q.answer) x.classList.add('right'); });
+          if (!ok) b.classList.add('wrong');
+          why.hidden = false; why.innerHTML = `<strong class="${ok ? 'ok' : 'no'}">${ok ? 'Richtig.' : 'Leider falsch.'}</strong> ${md(q.why)}`;
+          settle(ok);
+        };
+        opts.append(b);
+      });
+      box.append(opts);
+    } else {
+      const form = el(`<form class="ans" autocomplete="off"><input type="text" inputmode="text" enterkeyhint="done" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Ausgabe eintippen" aria-label="Ausgabe von Frage ${qi + 1}"><button type="submit" disabled>Prüfen</button></form>`);
+      const input = $('input', form), btn = $('button', form);
+      input.oninput = () => { btn.disabled = !input.value.trim(); };
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        if (!input.value.trim() || input.readOnly) return;
+        const ok = sameAnswer(input.value, q.output);
+        input.readOnly = true; btn.disabled = true; input.classList.add(ok ? 'right' : 'wrong'); input.blur();
+        why.hidden = false;
+        why.innerHTML = `<strong class="${ok ? 'ok' : 'no'}">${ok ? 'Richtig.' : 'Leider falsch.'}</strong> ${ok ? '' : `Richtig wäre <code>${esc(q.output)}</code>. `}${md(q.why)} <button class="tryrun" type="button">Selbst ausführen</button>`;
+        const out = el(outHTML);
+        $('.tryrun', why).onclick = async (ev) => {
+          ev.target.disabled = true; ev.target.textContent = 'Läuft…';
+          try { renderOutput(out, await engine.run(q.code)); } catch { failBox(box); }
+          ev.target.remove();
+        };
+        why.after(out);
+        settle(ok);
+      };
+      box.append(form);
+    }
+    box.append(why);
+    list.append(box);
+  });
+  return sec;
+}
+
+/* ---------- Spielwiese ---------- */
+function showPlayground() {
+  engine.start();
+  const app = $('#app');
+  app.innerHTML = `<div class="topbar"><span></span></div>
+    <header class="play-head"><h1>Spielwiese</h1><p>Schreib einfach los. Dein Code bleibt in diesem Browser gespeichert.</p></header>
+    <div class="chips" role="list"></div>`;
+  $('.topbar', app).append(enginePill());
+  const box = runnable(SNIPPETS[0].code, { fname: 'spielwiese.php', big: true, storeKey: 'play' });
+  const clear = el('<button class="sbtn" type="button">Leeren</button>');
+  clear.onclick = () => { setDoc(box._view, '<?php\n\n'); box._view.focus(); };
+  $('.slab-foot', box).append(clear);
+  const chips = $('.chips', app);
+  for (const s of SNIPPETS) {
+    const c = el(`<button class="chip" type="button" role="listitem">${esc(s.name)}</button>`);
+    c.onclick = () => { setDoc(box._view, s.code); toast(`„${s.name}“ geladen`); };
+    chips.append(c);
+  }
+  app.append(box);
+}
+
+/* ---------- Router ---------- */
+function route() {
+  views.forEach((v) => v.destroy()); views = [];
+  cleanups.forEach((f) => f()); cleanups = [];
+  active = null; document.body.classList.remove('typing'); keybar.classList.remove('on');
+  const h = location.hash.slice(1);
+  let tab = 'kurs';
+  if (h === 'spielwiese') { showPlayground(); tab = 'play'; }
+  else if (/^lektion-\d+$/.test(h)) showLesson(+h.split('-')[1] - 1);
+  else showHome();
+  document.querySelectorAll('.tabs a').forEach((a) => {
+    if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
